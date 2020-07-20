@@ -1,0 +1,56 @@
+body {
+	background: #19191b;
+	color: #c3c3c3;
+}
+pre {
+	background-color: #282923;
+	font-family: consolas;
+	padding: 1em;
+	border-radius: 15px;
+	line-height: 1.3em;
+    font-size: 13px;
+}
+
+/* Monokai for dark mode*/
+
+.n, .nn, .p, .vm { /* normal names */
+	color: #f8f8f2;
+}
+.k, .kn, .ow { /* normal keyword; "import", "as"; operator.word ... */
+	color: #f92b50;
+}
+.kd, .kt, .ne {/* "class" and "def"; type; exception */
+	color: #67d8da;
+	font-style: italic
+}
+ .nd { /* decorator */
+ 	color: #67d8da;
+ }
+.nb, .nfc { /* builtins */
+	color: #67d8da;
+}
+.o, .nt { /* "=" ; htmlTag; $*/
+	color: #f92472;
+}
+.sd, .c1, .err, .c, .cp { /* hash comment */
+	color: #747053;
+}
+.mi, .mf, .kc, .se, .si { /* integers, floats, constant keyword, string.escape */
+	color: #ac80ff;
+}
+.s, .s1, .s2 { /* str */
+	color: #e7db74;
+}
+.bp, .ka { /* "self", keyword arguments */
+	color: #fd7e2f;
+	font-style: italic;
+}
+.nc, .nf, .na { /* name of class; function; htmlTagAttribute */
+	color: #a6e22f;
+	}
+.fm, .sa { /* __init__ */
+	color: #67d8da;
+}
+.sa { /* f"" */ 
+	font-style: italic;
+}
