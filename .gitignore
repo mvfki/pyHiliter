@@ -2,3 +2,4 @@ build/*
 dist/*
 enhanced_pygments_lexers.egg-info/*
 __pycache__/*
+enhanced_pygments_lexers/__pycache__/*
