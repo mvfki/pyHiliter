@@ -1,9 +1,0 @@
-README.md
-setup.cfg
-setup.py
-enhanced_pygments_lexers/__init__.py
-enhanced_pygments_lexers/pythonLexer.py
-enhanced_pygments_lexers.egg-info/PKG-INFO
-enhanced_pygments_lexers.egg-info/SOURCES.txt
-enhanced_pygments_lexers.egg-info/dependency_links.txt
-enhanced_pygments_lexers.egg-info/top_level.txt
