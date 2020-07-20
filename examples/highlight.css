@@ -1,3 +1,4 @@
+/* As close to Monokai as possible */
 body {
 	background: #19191b;
 	color: #c3c3c3;
@@ -10,47 +11,32 @@ pre {
 	line-height: 1.3em;
     font-size: 13px;
 }
-
-/* Monokai for dark mode*/
-
 .n, .nn, .p, .vm { /* normal names */
-	color: #f8f8f2;
+	color: #f8f8f2; /* white */
 }
-.k, .kn, .ow { /* normal keyword; "import", "as"; operator.word ... */
-	color: #f92b50;
+.k, .kn, .o, .ow, .sr, .nt { /* normal keyword; "import", "as"; operator.word; special regex */
+	color: #f92b50; /* red */
 }
-.kd, .kt, .ne {/* "class" and "def"; type; exception */
-	color: #67d8da;
+.kd, .kt, .ne, .sa {/* "class" and "def"; type; exception; r'' */
+	color: #67d8da; /* blue */
 	font-style: italic
 }
- .nd { /* decorator */
- 	color: #67d8da;
+.nd, .nb, .nfc, .fm { /* decorator; builtins; function called */
+ 	color: #67d8da; /* blue */
  }
-.nb, .nfc { /* builtins */
-	color: #67d8da;
-}
-.o, .nt { /* "=" ; htmlTag; $*/
-	color: #f92472;
-}
 .sd, .c1, .err, .c, .cp { /* hash comment */
-	color: #747053;
+	color: #747053; /* grey */
 }
-.mi, .mf, .kc, .se, .si { /* integers, floats, constant keyword, string.escape */
-	color: #ac80ff;
+.mi, .mf, .kc, .se, .si, .srb { /* integers, floats, constant keyword, string.escape */
+	color: #ac80ff; /* purple */
 }
 .s, .s1, .s2 { /* str */
-	color: #e7db74;
+	color: #e7db74; /* yellow */
 }
 .bp, .ka { /* "self", keyword arguments */
-	color: #fd7e2f;
+	color: #fd7e2f; /* orange */
 	font-style: italic;
 }
 .nc, .nf, .na { /* name of class; function; htmlTagAttribute */
-	color: #a6e22f;
+	color: #a6e22f; /* green */
 	}
-.fm, .sa { /* __init__ */
-	color: #67d8da;
-}
-.sa { /* f"" */ 
-	font-style: italic;
-}

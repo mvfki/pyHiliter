@@ -10,31 +10,36 @@ Since I am not really happy with [Pygments](https://pygments.org/)' lexical anal
 
 ## Current Achievements
 
-Demonstration code:
+### Python3
+
+- Function, object method, builtins being called
+- Argument names in function definition
+- keyword argument name in callable calling
+- Regex raw string
+
+Demonstration code:  
 
 ```python
-import numpy as np
-def foo(bar1, bar2, bar3=233, bar4=None):
-    # Do something
-    print(bar1)
-    print(str(bar2) + str(bar4))
+import re
+def foo(bar1, bar2=None):
+    hello_patter = r"""(?i)hel{2}[iop]\s(?#New
+    line)worl.*?\b"""
+    all_result = re.search(hello_patter, bar1)
+    print(all_result)
 
-foo('hi')
-np.array([[1, 2, 3], 
-          [2, 3, 4]], 
-          dtype=np.int)
+text = '''Hello World!!!!'''
+
+foo(text, bar2="not used")
 ```
 
-How it looks in Sublime under Monokai theme:  
+How it looks in Sublime Text editor under **Monokai** theme:  
 
-![Sublime Display](examples/python_Sublime.png)
+![Sublime Display](examples/python_Sublime.png)  
 
-How it looks in browser after conversion by the enhanced lexer:  
+How it looks in browser after conversion by the native Pygments conversion, using a CSS defined as close to Monokai as possible [`examples/highlight.css`](examples/highlight.css):  
 
-![Converted Result](examples/python_demo.png)
+![Native Result](examples/python_Pygments.png)  
 
-Note that the font type and color scheme are set in external CSS file: `examples/highlight.css`.  
+How it looks in browser after conversion by the enhanced lexer, using the same CSS:  
 
-How it looks in browser after conversion by the native Pygments conversion, using the same CSS:  
-
-![Native Result](examples/python_Pygments.png)
+![Converted Result](examples/python_demo.png)  

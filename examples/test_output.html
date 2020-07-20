@@ -2,14 +2,14 @@
 		<title>Test Python - Enhanced Pygments Lexer</title>
 		<link href="highlight.css" rel="stylesheet"/>
 	</head>
-	<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kd">def</span> <span class="nf">foo</span><span class="p">(</span><span class="ka">bar1</span><span class="p">,</span> <span class="ka">bar2</span><span class="p">,</span> <span class="ka">bar3</span><span class="o">=</span><span class="mi">233</span><span class="p">,</span> <span class="ka">bar4</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="c1"># Do something</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">bar1</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="kt">str</span><span class="p">(</span><span class="n">bar2</span><span class="p">)</span> <span class="o">+</span> <span class="kt">str</span><span class="p">(</span><span class="n">bar4</span><span class="p">))</span>
+	<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">bar1</span><span class="p">,</span> <span class="n">bar2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">hello_patter</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">"""(?i)hel</span><span class="si">{2}</span><span class="s2">[iop]\s(?#New</span>
+<span class="s2">    line)worl.*?\b"""</span>
+    <span class="n">all_result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">hello_patter</span><span class="p">,</span> <span class="n">bar1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">all_result</span><span class="p">)</span>
 
-<span class="nfc">foo</span><span class="p">(</span><span class="s1">'hi'</span><span class="p">)</span>
-<span class="n">np</span><span class="p">.</span><span class="nfc">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> 
-          <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span> 
-          <span class="ka">dtype</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="kt">int</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s1">'''Hello World!!!!'''</span>
+
+<span class="n">foo</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">bar2</span><span class="o">=</span><span class="s2">"not used"</span><span class="p">)</span>
 </pre></div></html>

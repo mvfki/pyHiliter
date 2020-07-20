@@ -1,4 +1,5 @@
 from pygments import highlight
+from pygments.lexers import PythonLexer
 from pygments.formatters import HtmlFormatter
 from bs4 import BeautifulSoup
 

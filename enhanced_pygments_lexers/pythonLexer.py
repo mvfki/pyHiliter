@@ -11,6 +11,7 @@ from pygments import unistring as uni
 
 STANDARD_TYPES[Keyword.Argument] = 'ka'
 STANDARD_TYPES[Name.Function.Called] = 'nfc'
+STANDARD_TYPES[String.Regex.Bracket] = 'srb'
 
 class EnhancedPythonLexer(PythonLexer):
     uni_name = "[%s][%s]*" % (uni.xid_start, uni.xid_continue)
@@ -57,13 +58,13 @@ class EnhancedPythonLexer(PythonLexer):
         'expr': [
             # raw f-strings
             ('(?i)(rf|fr)(""")',
-             bygroups(String.Affix, String.Double), 'tdqf'),
+             bygroups(String.Affix, String.Double.Rawf), 'tdqf'),
             ("(?i)(rf|fr)(''')",
-             bygroups(String.Affix, String.Single), 'tsqf'),
+             bygroups(String.Affix, String.Single.Rawf), 'tsqf'),
             ('(?i)(rf|fr)(")',
-             bygroups(String.Affix, String.Double), 'dqf'),
+             bygroups(String.Affix, String.Double.Rawf), 'dqf'),
             ("(?i)(rf|fr)(')",
-             bygroups(String.Affix, String.Single), 'sqf'),
+             bygroups(String.Affix, String.Single.Rawf), 'sqf'),
             # non-raw f-strings
             ('([fF])(""")', bygroups(String.Affix, String.Double),
              combined('fstringescape', 'tdqf')),
@@ -74,15 +75,14 @@ class EnhancedPythonLexer(PythonLexer):
             ("([fF])(')", bygroups(String.Affix, String.Single),
              combined('fstringescape', 'sqf')),
             # raw strings
-            ## TODO: special regex expression highlight
             ('(?i)(rb|br|r)(""")',
-             bygroups(String.Affix, String.Double), 'tdqs'),
+             bygroups(String.Affix, String.Double.Raw), 'tdqrs'),
             ("(?i)(rb|br|r)(''')",
-             bygroups(String.Affix, String.Single), 'tsqs'),
+             bygroups(String.Affix, String.Single.Raw), 'tsqrs'),
             ('(?i)(rb|br|r)(")',
-             bygroups(String.Affix, String.Double), 'dqs'),
+             bygroups(String.Affix, String.Double.Raw), 'dqrs'),
             ("(?i)(rb|br|r)(')",
-             bygroups(String.Affix, String.Single), 'sqs'),
+             bygroups(String.Affix.Debug, String.Single.Raw), 'sqrs'),
             # non-raw strings
             ('([uUbB]?)(""")', bygroups(String.Affix, String.Double),
              combined('stringescape', 'tdqs')),
@@ -140,7 +140,7 @@ class EnhancedPythonLexer(PythonLexer):
              bygroups(Name.Function.Called, Punctuation), 'funcCallArgs'),
             (uni_name, Name),
         ],
-        #### Definition of function ####
+        #### Function definition and calling ####
         'funcDef': [
             include('magicfuncs'),
             # If is magicFunc
@@ -181,6 +181,7 @@ class EnhancedPythonLexer(PythonLexer):
             (r',', Punctuation, '#pop'),
             default('#pop')
         ],
+        #### Separate keyword of types ####
         'builtins': [
             (BUILTINS.get() + r'\b', Name.Builtin),
             (KEYWORD_TYPES.get() + r'\b', Keyword.Type),
@@ -215,5 +216,99 @@ class EnhancedPythonLexer(PythonLexer):
                 'RecursionError'),
                 prefix=r'(?<!\.)', suffix=r'\b'),
              Name.Exception),
+        ],
+        #### Regex ####
+        ## TODO: Merge duplicated patterns due to tdq, tsq, dq and sq string.
+        # single quote raw string
+        'sqrs': [
+            (r"'", String.Single, '#pop'),
+            (r"\\\d{1,2}|\\[AZzBb]", String.Regex), # things like \12 \z \b | *
+            (r"\\.|\.", String.Escape),
+            (r"\{\d+\}|\{\d+,\d+\}|[|*^$+?*]|\(\?[iLmsux]+\)|\(\?P=[_a-zA-Z0-9]+\)", String.Regex),
+            (r"\(\?:", String.Single.Raw),
+            (r"\(\?#", Comment, 'single-regex-comment'),
+            (r"(\()(\?\!|\?\<\!|\?\=|\?\<\=)", bygroups(String.Single.Raw, String.Escape)),
+            (r"\[", String.Regex.Bracket, 'single-regex-bracket'),
+            (r".", String.Single.Raw)
+        ],
+        'single-regex-bracket': [
+            (r"\]", String.Regex.Bracket, '#pop'),
+            (r".(?=')", String.Regex.Bracket, '#pop'),
+            (r".", String.Regex.Bracket)
+        ],
+        'single-regex-comment': [
+            (r"\)", Comment, '#pop'),
+            (r".(?=')", Comment, '#pop'),
+            (r".", Comment)
+        ],
+        # double quote raw string
+        'dqrs': [
+            (r'"', String.Double, '#pop'),
+            (r"\\\d{1,2}|\\[AZzBb]", String.Regex), # things like \12 \z \b | *
+            (r"\\.|\.", String.Escape),
+            (r"\{\d+\}|\{\d+,\d+\}|[|*^$+?*]|\(\?[iLmsux]+\)|\(\?P=[_a-zA-Z0-9]+\)", String.Regex),
+            (r"\(\?:", String.Double.Raw),
+            (r"\(\?#", Comment, 'double-regex-comment'),
+            (r"(\()(\?\!|\?\<\!|\?\=|\?\<\=)", bygroups(String.Double.Raw, String.Escape)),
+            (r"\[", String.Regex.Bracket, 'double-regex-bracket'),
+            (r".", String.Double.Raw)
+        ],
+        'double-regex-bracket': [
+            (r"\]", String.Regex.Bracket, '#pop'),
+            (r'.(?=")', String.Regex.Bracket, '#pop'),
+            (r".", String.Regex.Bracket)
+        ],
+        'double-regex-comment': [
+            (r"\)", Comment, '#pop'),
+            (r'.(?=")', Comment, '#pop'),
+            (r".", Comment)
+        ],
+        # Triple single quote raw string
+        'tsqrs': [
+            (r"'''", String.Single, '#pop'),
+            (r"\\\d{1,2}|\\[AZzBb]", String.Regex), # things like \12 \z \b | *
+            (r"\\.|\.", String.Escape),
+            (r"\{\d+\}|\{\d+,\d+\}|[|*^$+?*]|\(\?[iLmsux]+\)|\(\?P=[_a-zA-Z0-9]+\)", String.Regex),
+            (r"\(\?:", String.Single.Raw),
+            (r"\(\?#", Comment, 'single-regex-comment'),
+            (r"(\()(\?\!|\?\<\!|\?\=|\?\<\=)", bygroups(String.Single.Raw, String.Escape)),
+            (r"\[", String.Regex.Bracket, 'single-regex-bracket'),
+            (r".", String.Single.Raw)
+        ],
+        'tsingle-regex-bracket': [
+            (r'[\s\n]+', Text),
+            (r"\]", String.Regex.Bracket, '#pop'),
+            (r".(?='{3})", String.Regex.Bracket, '#pop'),
+            (r".", String.Regex.Bracket)
+        ],
+        'tsingle-regex-comment': [
+            (r'[\s\n]+', Text),
+            (r"\)", Comment, '#pop'),
+            (r".(?='{3})", Comment, '#pop'),
+            (r".", Comment)
+        ],
+        # Triple double quote raw string
+        'tdqrs': [
+            (r'"""', String.Double, '#pop'),
+            (r"\\\d{1,2}|\\[AZzBb]", String.Regex),
+            (r"\\.|\.", String.Escape),
+            (r"\{\d+\}|\{\d+,\d+\}|[|*^$+?*]|\(\?[iLmsux]+\)|\(\?P=[_a-zA-Z0-9]+\)", String.Regex),
+            (r"\(\?:", String.Double.Raw),
+            (r"\(\?#", Comment, 'double-regex-comment'),
+            (r"(\()(\?\!|\?\<\!|\?\=|\?\<\=)", bygroups(String.Double.Raw, String.Escape)),
+            (r"\[", String.Regex.Bracket, 'double-regex-bracket'),
+            (r".", String.Double.Raw)
+        ],
+        'double-regex-bracket': [
+            (r'[\s\n]+', Text),
+            (r"\]", String.Regex.Bracket, '#pop'),
+            (r'.(?="{3})', String.Regex.Bracket, '#pop'),
+            (r".", String.Regex.Bracket)
+        ],
+        'double-regex-comment': [
+            (r'[\s\n]+', Text),
+            (r"\)", Comment, '#pop'),
+            (r'.(?="{3})', Comment, '#pop'),
+            (r".", Comment)
         ],
     }
