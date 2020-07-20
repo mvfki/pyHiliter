@@ -27,10 +27,14 @@ np.array([[1, 2, 3],
 
 How it looks in Sublime under Monokai theme:  
 
-[Sublime Display](examples/python_Sublime.png)
+![Sublime Display](examples/python_Sublime.png)
 
 How it looks in browser after conversion by the enhanced lexer:  
 
-[Converted Result](examples/python_demo.png)
+![Converted Result](examples/python_demo.png)
 
 Note that the font type and color scheme are set in external CSS file: `examples/highlight.css`.  
+
+How it looks in browser after conversion by the native Pygments conversion, using the same CSS:  
+
+![Native Result](examples/python_Pygments.png)
