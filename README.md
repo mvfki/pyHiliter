@@ -32,14 +32,8 @@ text = '''Hello World!!!!'''
 foo(text, bar2="not used")
 ```
 
-How it looks in Sublime Text editor under **Monokai** theme:  
+The figure below shows how it appears to be improved.  
 
-![Sublime Display](examples/python_Sublime.png)  
+![Results](examples/python_demo.png)  
 
-How it looks in browser after conversion by the native Pygments conversion, using a CSS defined as close to Monokai as possible [`examples/highlight.css`](examples/highlight.css):  
-
-![Native Result](examples/python_Pygments.png)  
-
-How it looks in browser after conversion by the enhanced lexer, using the same CSS:  
-
-![Converted Result](examples/python_demo.png)  
+Note that due to my fanatic love towards Sublime Monokai theme, I'm actually using the same color schemes for multiple typs of syntax scopes, exactly as how Monokai is designed, even though they can be successfully identified as different elements. Refer to [`examles/highlight.css`](examples/highlight.css).   
