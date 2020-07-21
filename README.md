@@ -1,10 +1,11 @@
-# pyHiliter 
+# pyHiliter - Improved Pygments PythonLexer
 
 Since I am not really happy with [Pygments](https://pygments.org/)' lexical analysis result, and I really could not find another tool that is as easy to use as Pygments, I start this repo for improved code lexing plugins for Pygment users (myself), and bound the lexer with a Markdown extension. The improvement is mainly about adding more syntax scopes. For example, arguments function definition.  
 
-> What is a lexer?
-> A program that performs lexical analysis may be termed a lexer, tokenizer, or scanner, although scanner is also a term for the first stage of a lexer. A lexer is generally combined with a parser, which together analyze the syntax of programming languages, web pages, and so forth.  
-> - Wikipedia
+> **What is a lexer?**  
+> A program that performs lexical analysis may be termed a lexer, tokenizer, or scanner, although scanner is also a term for the first stage of a lexer. A lexer is generally combined with a parser, which together analyze the syntax of programming languages, web pages, and so forth. 
+> 
+> from Wikipedia
 
 ## Usage
 
@@ -57,7 +58,7 @@ cp pyHiliter/pyLexer.py {$pathTo}/site-packages/pygments/lexers/python.py
 
 Yes, manually override the original Pygment Python lexer. So anytime when Pygments is invoked and the `PythonLexer` is requested, the one from this package will be found. 
 
-WARNING: the original `python.py.old` file also contains other Python related lexers, such as the ones for Python console, traceback, and *etc.*. These are not included in my implementation yet. Overriding will cause those features to be disabled.  
+**WARNING**: the original `python.py.old` file also contains other Python related lexers, such as the ones for Python console, traceback, and *etc.*. These are not included in my implementation yet. Overriding will cause those features to be disabled.  
 
 And when using it:
 
