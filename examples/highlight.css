@@ -11,6 +11,9 @@ pre {
 	line-height: 1.3em;
     font-size: 13px;
 }
+	pre code {
+		font-family: consolas;
+	}
 .n, .nn, .p, .vm { /* normal names */
 	color: #f8f8f2; /* white */
 }
