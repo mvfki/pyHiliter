@@ -11,7 +11,7 @@ from markdown.preprocessors import Preprocessor
 from markdown.blockprocessors import BlockProcessor
 import xml.etree.ElementTree as etree
 import re
-from .pythonLexer import EnhancedPythonLexer
+from .EnhancedPythonLexer import EnhancedPythonLexer
 from pygments.formatters import HtmlFormatter
 from pygments import highlight
 

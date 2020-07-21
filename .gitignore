@@ -1,6 +1,6 @@
 build/*
 dist/*
-enhanced_pygments_lexers.egg-info/*
+pyHiliter.egg-info/*
 __pycache__/*
-enhanced_pygments_lexers/__pycache__/*
+pyHiliter/__pycache__/*
 examples/test_output.html
