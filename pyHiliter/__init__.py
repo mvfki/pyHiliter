@@ -1,1 +1,1 @@
-from .EnhancedPythonLexer import EnhancedPythonLexer
+from .pyLexer import PythonLexer, Python3Lexer
