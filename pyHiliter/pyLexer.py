@@ -228,8 +228,6 @@ class PythonLexer(RegexLexer):
                 'pass', 'raise', 'nonlocal', 'return', 'try', 'while', 
                 'yield', 'yield from', 'as', 'with'), suffix=r'\b'),
              Keyword),
-            (words(('True', 'False', 'None'), suffix=r'\b'), 
-             Keyword.Constant),
         ],
         #### Separate keyword of types ####
         'builtins': [
@@ -314,6 +312,8 @@ class PythonLexer(RegexLexer):
         'name': [
             include('magicfuncs'),
             include('magicvars'),
+            (words(('True', 'False', 'None'), suffix=r'\b'), 
+             Keyword.Constant),
             # new matrix multiplication operator
             (r'([a-zA-Z_][\w\d_]*)(\s*)(@)', bygroups(Name, Text, Operator)),  
             (r'(@)(\s*)', bygroups(Operator, Text), 'decorator'),
@@ -362,9 +362,9 @@ class PythonLexer(RegexLexer):
             (r'(\s*)(\*{0,2})([a-zA-Z_][\w\d_]*)(\s*)(,*)',
              bygroups(Text, Operator, Keyword.Argument.Three, Text, Punctuation)),
             (r'(\))(\s*)(->)(\s*)', 
-             bygroups(Punctuation, Text, Punctuation, Text), 'annotation-return'),
+             bygroups(Punctuation, Text, Punctuation.Arrow, Text), 'annotation-return'),
             ## End of a call
-            (r'\):', Punctuation, '#pop'),
+            (r'\)?:', Punctuation, '#pop'),
             default('#pop')
         ],
         'annotation-argument': [
@@ -373,9 +373,8 @@ class PythonLexer(RegexLexer):
             default('#pop')
         ],
         'annotation-return': [
-            (':', Punctuation, '#pop'),
+            ('()(?=:)', Text, '#pop'),
             include('expr'),
-            default('#pop')
         ],
         'funcCallArgs': [
             (r'[\s\n]+', Text),
