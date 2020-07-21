@@ -346,16 +346,36 @@ class PythonLexer(RegexLexer):
             (r'[\s\n]+', Text),
             # For Arguments in the parenthesis of a function definition
             (r',', Punctuation),
-            ## Keyword arguments
-            (r'(\s*)([\w\d_]+)(\s*)(=)(\s*)',
-             bygroups(Text, Keyword.Argument, Text, Operator, Text),
+            ## Arguments annotation
+            (r'(\s*)([a-zA-Z_][\w\d_]*)(\s*)(\:)(\s*)', 
+             bygroups(Text, Keyword.Argument.One, Text, Punctuation, Text),
+             'annotation-argument'),
+            ## Keyword arguments, no annotation
+            (r'(\s*)([a-zA-Z_][\w\d_]*)(\s*)(=)(\s*)',
+             bygroups(Text, Keyword.Argument.Two, Text, Operator, Text),
              'kwargsValue'),
+            ## *args, **kwargs with annotation
+            (r'(\s*)(\*{1,2})([a-zA-Z_][\w\d_]*)(\s*)(\:)(\s*)',
+             bygroups(Text, Operator, Keyword.Argument.StarAnn, Text, Punctuation, Text),
+             'annotation-argument'),
             ## Positional Argument
-            (r'(\s*)(\*{0,2})([\w\d_]+)(\s*)(,*)',
-             bygroups(Text, Operator, Keyword.Argument, Text, Punctuation)),
-            # TODO: star sign for *args and **kwargs
+            (r'(\s*)(\*{0,2})([a-zA-Z_][\w\d_]*)(\s*)(,*)',
+             bygroups(Text, Operator, Keyword.Argument.Three, Text, Punctuation)),
+            (r'(\))(\s*)(->)(\s*)', 
+             bygroups(Punctuation, Text, Punctuation, Text), 'annotation-return'),
             ## End of a call
-            (r'\):', Punctuation, '#pop')
+            (r'\):', Punctuation, '#pop'),
+            default('#pop')
+        ],
+        'annotation-argument': [
+            (',', Punctuation, '#pop'),
+            include('expr'),
+            default('#pop')
+        ],
+        'annotation-return': [
+            (':', Punctuation, '#pop'),
+            include('expr'),
+            default('#pop')
         ],
         'funcCallArgs': [
             (r'[\s\n]+', Text),
