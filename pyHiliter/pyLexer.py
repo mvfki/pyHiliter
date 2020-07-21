@@ -14,6 +14,7 @@ line_re = re.compile('.*?\n')
 STANDARD_TYPES[Keyword.Argument] = 'ka'
 STANDARD_TYPES[Name.Function.Called] = 'nfc'
 STANDARD_TYPES[String.Regex.Bracket] = 'srb'
+STANDARD_TYPES[Keyword.Lambda] = 'kl'
 
 class PythonLexer(RegexLexer):
     """
@@ -122,11 +123,12 @@ class PythonLexer(RegexLexer):
             (r'(def)((?:\s|\\\s)+)', bygroups(Keyword.Declaration, Text),
              'funcDef'),
             (r'(class)((?:\s|\\\s)+)', bygroups(Keyword.Declaration, Text),
-             'classname'),
+             'classDef'),
             (r'(from)((?:\s|\\\s)+)', bygroups(Keyword.Namespace, Text),
              'fromimport'),
             (r'(import)((?:\s|\\\s)+)', bygroups(Keyword.Namespace, Text),
              'import'),
+            (r'(@)((?:\s|\\\s)+)', bygroups(Operator, Text), 'decorator'),
             include('general-expr')
         ],
         'general-expr': [
@@ -220,22 +222,15 @@ class PythonLexer(RegexLexer):
             (r'[^\S]+', Text),  # allow new lines
             include('expr'),
         ],
-        'expr-keywords': [
-            # Based on https://docs.python.org/3/reference/expressions.html
-            (words((
-                'async for', 'await', 'else', 'for', 'if', 'lambda',
-                'yield', 'yield from'), suffix=r'\b'),
-             Keyword),
-            (words(('True', 'False', 'None'), suffix=r'\b'), Keyword.Constant),
-        ],
         'keywords': [
             (words((
-                'assert', 'async', 'await', 'break', 'continue', 'del', 'elif',
-                'else', 'except', 'finally', 'for', 'global', 'if', 'lambda',
-                'pass', 'raise', 'nonlocal', 'return', 'try', 'while', 'yield',
-                'yield from', 'as', 'with'), suffix=r'\b'),
+                'assert', 'async', 'await', 'break', 'continue', 'del', 
+                'elif', 'else', 'except', 'finally', 'for', 'global', 'if', 
+                'pass', 'raise', 'nonlocal', 'return', 'try', 'while', 
+                'yield', 'yield from', 'as', 'with'), suffix=r'\b'),
              Keyword),
-            (words(('True', 'False', 'None'), suffix=r'\b'), Keyword.Constant),
+            (words(('True', 'False', 'None'), suffix=r'\b'), 
+             Keyword.Constant),
         ],
         #### Separate keyword of types ####
         'builtins': [
@@ -318,11 +313,11 @@ class PythonLexer(RegexLexer):
             (r'\d(?:_?\d)*', Number.Integer),
         ],
         'name': [
-            include('expr-keywords'),
             include('magicfuncs'),
             include('magicvars'),
-            (r'(@)([a-zA-Z_][\w\d_]*)', bygroups(Operator, Name.Decorator)),
             (r'@', Operator),  # new matrix multiplication operator
+            # lambda function
+            ('lambda', Keyword.Lambda, 'lambda'),
             # builtin callable
             (rf"({'|'.join(BUILTINS.words)})(\()",
              bygroups(Name.Builtin, Punctuation), 'funcCallArgs', '#pop'),
@@ -355,8 +350,9 @@ class PythonLexer(RegexLexer):
              bygroups(Text, Keyword.Argument, Text, Operator, Text),
              'kwargsValue'),
             ## Positional Argument
-            (r'(\s*)([\w\d_]+)(\s*)(,*)',
-             bygroups(Text, Keyword.Argument, Text, Punctuation)),
+            (r'(\s*)(\*{0,2})([\w\d_]+)(\s*)(,*)',
+             bygroups(Text, Operator, Keyword.Argument, Text, Punctuation)),
+            # TODO: star sign for *args and **kwargs
             ## End of a call
             (r'\):', Punctuation, '#pop')
         ],
@@ -365,7 +361,7 @@ class PythonLexer(RegexLexer):
             # For Arguments in the parenthesis of a function definition
             (r',', Punctuation),
             ## Keyword arguments
-            (r'(\s*)([\w\d_]+)(\s*)(=)(\s*)',
+            (r'(\s*)([a-zA-Z_][\w\d_]*)(\s*)(=)(\s*)',
              bygroups(Text, Keyword.Argument, Text, Operator, Text),
              'kwargsValue'),
             include('expr'),
@@ -376,8 +372,19 @@ class PythonLexer(RegexLexer):
             (r',', Punctuation, '#pop'),
             default('#pop')
         ],
-        'classname': [
-            (uni_name, Name.Class, '#pop'),
+        'lambda': [
+            (':', Punctuation, 'expr'),
+            (r'(\s*)([a-zA-Z_][\w\d_]*)(\s*)(,{0,1})', 
+             bygroups(Text, Keyword.Argument, Text, Punctuation))
+        ],
+        'classDef': [
+            (r'([a-zA-Z_][\w\d_]*)(\s*)(\()', 
+             bygroups(Name.Class, Text, Punctuation), 'inheritance'),
+        ],
+        'inheritance': [
+            (r'\):', Punctuation, '#pop'),
+            (r'(\s*)([a-zA-Z_][\w\d_]*)(\s*)(,?)', 
+             bygroups(Text, Name.Class.Inherit, Text, Punctuation)),
         ],
         'import': [
             (r'(\s+)(as)(\s+)', bygroups(Text, Keyword, Text)),
@@ -394,6 +401,11 @@ class PythonLexer(RegexLexer):
             (r'None\b', Name.Builtin.Pseudo, '#pop'),
             (uni_name, Name.Namespace),
             default('#pop'),
+        ],
+        'decorator': [
+            ('\n', Text, '#pop'),
+            (r'(\s*)([a-zA-Z_][\w\d_]*)(\s*)(\.)', bygroups(Text, Name, Text, Punctuation)),
+            (r'(\s*)([a-zA-Z_][\w\d_]*)(\s*)(?=\n)', bygroups(Text, Name.Decorator, Text))
         ],
         'fstringescape': [
             ('{{', String.Escape),

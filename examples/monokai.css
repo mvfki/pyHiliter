@@ -20,7 +20,7 @@ pre {
 .k, .kn, .o, .ow, .sr, .nt { /* normal keyword; "import", "as"; operator.word; special regex */
 	color: #f92b50; /* red */
 }
-.kd, .kt, .ne, .sa {/* "class" and "def"; type; exception; r'' */
+.kd, .kt, .ne, .sa, .kl {/* "class" and "def"; type; exception; r''; lambda */
 	color: #67d8da; /* blue */
 	font-style: italic
 }
@@ -43,3 +43,6 @@ pre {
 .nc, .nf, .na { /* name of class; function; htmlTagAttribute */
 	color: #a6e22f; /* green */
 	}
+.nc-Inherit {
+	font-style: italic;
+}

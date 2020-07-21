@@ -2,11 +2,15 @@
 
 Since I am not really happy with [Pygments](https://pygments.org/)' lexical analysis result, and I really could not find another tool that is as easy to use as Pygments, I start this repo for improved code lexing plugins for Pygment users (myself), and bound the lexer with a Markdown extension. The improvement is mainly about adding more syntax scopes. For example, arguments function definition.  
 
+> What is a lexer?
+> A program that performs lexical analysis may be termed a lexer, tokenizer, or scanner, although scanner is also a term for the first stage of a lexer. A lexer is generally combined with a parser, which together analyze the syntax of programming languages, web pages, and so forth.  
+> - Wikipedia
+
 ## Usage
 
 Get the code
 
-```shell
+```sh
 git clone https://github.com/mvfki/pyHiliter.git
 cd pyHiliter
 ```
@@ -17,7 +21,7 @@ To make use of the lexer, two approaches are suggested.
 
 In this approach, you might want to get this package installed to your Python path, so that you can import it wherever you like.  
 
-```shell
+```sh
 python setup.py install
 ```
 
@@ -38,7 +42,7 @@ html_string = highlight(script_text, PythonLexer(), HtmlFormatter())
 
 The output will be a str, written with HTML syntax, and you can further manipulate it with your favorite HTML handler.
 
-```
+```python
 '<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>\n<span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nfc">join</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>\n</pre></div>\n'
 ```
 
@@ -46,7 +50,7 @@ The output will be a str, written with HTML syntax, and you can further manipula
 
 Python's native Markdown module allows third-party extension to parse syntax that is not officially supported, or to do the parsing with more detail. Pygments has also been imported by extension developers. If you are using a well-developed third-party extension that imports Pygments, such as [`PyMdown Extensions`](https://facelessuser.github.io/pymdown-extensions/), but you want the Python syntax highlighting to look better (just like me). Look at this smart yet dirty solution:  
 
-```shell
+```sh
 mv ${pathTo}/site-packages/pygments/lexers/python.py ${pathTo}/site-packages/pygments/lexers/python.py.old
 cp pyHiliter/pyLexer.py {$pathTo}/site-packages/pygments/lexers/python.py
 ```
@@ -64,17 +68,19 @@ md_text = "# Header\n```python\nprint('Hello', 'World', sep='!!! ', end='!!!!!!'
 html_string = markdown.markdown(md_text, extensions=['pymdownx.superfences'])
 ```
 
-## Current Achievements
+## Improved Features
 
 - Function, object method, builtins being called
 - Argument names in function definition
 - keyword argument name in callable calling
+- Inheited class in class definition
 - Regex raw string
+- Lambda function
+- Decorator
 
-TODOs:
+**TODO**
 
-- Inheritance in class declaration
-- Special syntax (a LOT) that I don't frequently use, such as "lambda function"
+Special syntax (a LOT) that I don't frequently use, I also need to explore more for this. Please [raise an issue](https://github.com/mvfki/pyHiliter/issues/new) if you find something is not supported properly.
 
 Demonstration code:  
 

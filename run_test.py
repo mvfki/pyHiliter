@@ -37,5 +37,5 @@ def test_md(md_filename, output_html_filename='examples/test_output.html',
     file_out.close()
 
 if __name__ == '__main__':
-    #test_py('examples/test_script_to_convert.py')
-    test_md('examples/test_input.md')
+    test_py('examples/test_script_to_convert.py')
+    #test_md('examples/test_input.md')
