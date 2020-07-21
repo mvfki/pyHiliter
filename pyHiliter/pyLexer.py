@@ -82,7 +82,6 @@ class PythonLexer(RegexLexer):
              r'(\![sra])?'                       # conversion
              r'(\:(.?[<>=\^])?[-+ ]?#?0?(\d+)?,?(\.\d+)?[E-GXb-gnosx%]?)?'
              r'\}', String.Interpol),
-
             # backslashes, quotes and formatting signs must be parsed 
             # one at a time
             (r'[^\\\'"%{\n]+', ttype),
@@ -128,7 +127,6 @@ class PythonLexer(RegexLexer):
              'fromimport'),
             (r'(import)((?:\s|\\\s)+)', bygroups(Keyword.Namespace, Text),
              'import'),
-            (r'(@)((?:\s|\\\s)+)', bygroups(Operator, Text), 'decorator'),
             include('general-expr')
         ],
         'general-expr': [
@@ -315,7 +313,9 @@ class PythonLexer(RegexLexer):
         'name': [
             include('magicfuncs'),
             include('magicvars'),
-            (r'@', Operator),  # new matrix multiplication operator
+            # new matrix multiplication operator
+            (r'([a-zA-Z_][\w\d_]*)(\s*)(@)', bygroups(Name, Text, Operator)),  
+            (r'(@)(\s*)', bygroups(Operator, Text), 'decorator'),
             # lambda function
             ('lambda', Keyword.Lambda, 'lambda'),
             # builtin callable
