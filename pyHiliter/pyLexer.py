@@ -356,13 +356,16 @@ class PythonLexer(RegexLexer):
              'kwargsValue'),
             ## *args, **kwargs with annotation
             (r'(\s*)(\*{1,2})([a-zA-Z_][\w\d_]*)(\s*)(\:)(\s*)',
-             bygroups(Text, Operator, Keyword.Argument.StarAnn, Text, Punctuation, Text),
+             bygroups(Text, Operator, Keyword.Argument.StarAnn, Text, 
+                      Punctuation, Text),
              'annotation-argument'),
             ## Positional Argument
             (r'(\s*)(\*{0,2})([a-zA-Z_][\w\d_]*)(\s*)(,*)',
-             bygroups(Text, Operator, Keyword.Argument.Three, Text, Punctuation)),
+             bygroups(Text, Operator, Keyword.Argument.Three, Text, 
+                      Punctuation)),
             (r'(\))(\s*)(->)(\s*)', 
-             bygroups(Punctuation, Text, Punctuation.Arrow, Text), 'annotation-return'),
+             bygroups(Punctuation, Text, Punctuation.Arrow, Text), 
+             'annotation-return'),
             ## End of a call
             (r'\)?:', Punctuation, '#pop'),
             default('#pop')
@@ -427,8 +430,10 @@ class PythonLexer(RegexLexer):
         ],
         'decorator': [
             ('\n', Text, '#pop'),
-            (r'(\s*)([a-zA-Z_][\w\d_]*)(\s*)(\.)', bygroups(Text, Name, Text, Punctuation)),
-            (r'(\s*)([a-zA-Z_][\w\d_]*)(\s*)(?=\n)', bygroups(Text, Name.Decorator, Text))
+            (r'(\s*)([a-zA-Z_][\w\d_]*)(\s*)(\.)', 
+             bygroups(Text, Name, Text, Punctuation)),
+            (r'(\s*)([a-zA-Z_][\w\d_]*)(\s*)(?=\n)', 
+             bygroups(Text, Name.Decorator, Text))
         ],
         'fstringescape': [
             ('{{', String.Escape),
