@@ -59,13 +59,8 @@ And when using it:
 
 ```python
 import markdown
-md_text = """
-# Header
 
-```python
-print('Hello', 'World', sep='!!!', end='!!!!!!')
-```
-"""
+md_text = "# Header\n```python\nprint('Hello', 'World', sep='!!! ', end='!!!!!!')\n```"
 html_string = markdown.markdown(md_text, extensions=['pymdownx.superfences'])
 ```
 
@@ -75,6 +70,11 @@ html_string = markdown.markdown(md_text, extensions=['pymdownx.superfences'])
 - Argument names in function definition
 - keyword argument name in callable calling
 - Regex raw string
+
+TODOs:
+
+- Inheritance in class declaration
+- Special syntax (a LOT) that I don't frequently use, such as "lambda function"
 
 Demonstration code:  
 
