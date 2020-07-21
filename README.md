@@ -1,12 +1,15 @@
-# enhanced_Pygments_lexers
+# pyHiliter 
 
-Since I am not really happy with [Pygments](https://pygments.org/)' lexical analysis result, and I really could not find another tool that is as easy to use as Pygments, I start this repo for improved code lexing plugins for Pygment users (myself). The improvement is mainly about adding more syntax scopes. For example, arguments in a Python function/method call.  
+Since I am not really happy with [Pygments](https://pygments.org/)' lexical analysis result, and I really could not find another tool that is as easy to use as Pygments, I start this repo for improved code lexing plugins for Pygment users (myself), and bound the lexer with a Markdown extension. The improvement is mainly about adding more syntax scopes. For example, arguments function definition.  
 
 ## Stages of Goals
 
 1. Make this plugin be able to parse as many types of Python elements as Sublime Text editor can.  
 2. Wrap it as a extension to Python Markdown module.  
-3. Extend to other programming languages that I frequently use (and whose Pygments output I'm not satisfied with)  
+
+## Usage
+
+This is still under development. Simplified usage will be updated until I'm good with it.
 
 ## Current Achievements
 
@@ -36,4 +39,4 @@ The figure below shows how it appears to be improved.
 
 ![Results](examples/python_results.png)  
 
-Note that due to my fanatic love towards Sublime Monokai theme, I'm actually using the same color schemes for multiple typs of syntax scopes, exactly as how Monokai is designed, even though they can be successfully identified as different elements. Refer to [`examles/highlight.css`](examples/highlight.css).   
+Note that due to my fanatic love towards Sublime Monokai theme, I'm actually using the same color schemes for multiple typs of syntax scopes, exactly as how Monokai is designed, even though they can be successfully identified as different elements. Refer to [`examles/highlight.css`](examples/monokai.css).   
