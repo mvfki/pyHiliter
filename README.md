@@ -53,10 +53,10 @@ Python's native Markdown module allows third-party extension to parse syntax tha
 
 ```sh
 mv ${pathTo}/site-packages/pygments/lexers/python.py ${pathTo}/site-packages/pygments/lexers/python.py.old
-cp pyHiliter/pyLexer.py {$pathTo}/site-packages/pygments/lexers/python.py
+ln -s pyHiliter/pyLexer.py {$pathTo}/site-packages/pygments/lexers/python.py
 ```
 
-Yes, manually override the original Pygment Python lexer. So anytime when Pygments is invoked and the `PythonLexer` is requested, the one from this package will be found. 
+Yes, manually override the original Pygment Python lexer. Inspired by [@markperfectsensedigital](https://github.com/markperfectsensedigital/custom_lexers) So anytime when Pygments is invoked and the `PythonLexer` is requested, the one from this package will be found. 
 
 **WARNING**: the original `python.py.old` file also contains other Python related lexers, such as the ones for Python console, traceback, and *etc.*. These are not included in my implementation yet. Overriding will cause those features to be disabled.  
 
