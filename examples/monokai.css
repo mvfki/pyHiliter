@@ -10,24 +10,29 @@ pre {
 	border-radius: 15px;
 	line-height: 1.3em;
     font-size: 13px;
+    color: #f8f8f2;
 }
 	pre code {
+		color: #f8f8f2;
 		font-family: consolas;
 	}
-.n, .nn, .p, .vm { /* normal names */
+.n, .nn, .p, .vm, .go { /* normal names */
 	color: #f8f8f2; /* white */
 }
-.k, .kn, .o, .ow, .sr, .nt { /* normal keyword; "import", "as"; operator.word; special regex */
+.k, .kn, .o, .ow, .sr, .nt, .gr { /* normal keyword; "import", "as"; operator.word; special regex */
 	color: #f92b50; /* red */
 }
-.kd, .kt, .ne, .sa, .kl {/* "class" and "def"; type; exception; r''; lambda */
+.gr {
+	font-style: italic;
+}
+.kd, .kt, .ne, .sa, .kl, .gt {/* "class" and "def"; type; exception; r''; lambda */
 	color: #67d8da; /* blue */
 	font-style: italic
 }
 .nd, .nb, .nfc, .fm { /* decorator; builtins; function called */
  	color: #67d8da; /* blue */
  }
-.sd, .c1, .err, .c, .cp { /* hash comment */
+.sd, .c1, .err, .c, .cp, .gp { /* hash comment */
 	color: #747053; /* grey */
 }
 .mi, .mf, .kc, .se, .si, .srb { /* integers, floats, constant keyword, string.escape */
@@ -36,6 +41,9 @@ pre {
 .s, .s1, .s2 { /* str */
 	color: #e7db74; /* yellow */
 }
+.n.n-File {
+	color: #e7db74; /* yellow */	
+}
 .bp, .ka { /* "self", keyword arguments */
 	color: #fd7e2f; /* orange */
 	font-style: italic;
@@ -43,6 +51,6 @@ pre {
 .nc, .nf, .na { /* name of class; function; htmlTagAttribute */
 	color: #a6e22f; /* green */
 	}
-.nc-Inherit {
+.nci {
 	font-style: italic;
 }

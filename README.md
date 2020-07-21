@@ -58,7 +58,7 @@ ln -s pyHiliter/pyLexer.py {$pathTo}/site-packages/pygments/lexers/python.py
 
 Yes, manually override the original Pygment Python lexer. Inspired by [@markperfectsensedigital](https://github.com/markperfectsensedigital/custom_lexers) So anytime when Pygments is invoked and the `PythonLexer` is requested, the one from this package will be found. 
 
-**WARNING**: the original `python.py.old` file also contains other Python related lexers, such as the ones for Python console, traceback, and *etc.*. These are not included in my implementation yet. Overriding will cause those features to be disabled.  
+**Note that** There are also other Python related lexers, such as the ones for Python console, traceback, and *etc.*. I also copied those lexers and appended them to the script, since excluding them will cause failure in parsing the corresponding language, yet no significant changes were made. 
 
 And when using it:
 

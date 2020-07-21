@@ -3,12 +3,12 @@ from pygments.formatters import HtmlFormatter
 from bs4 import BeautifulSoup
 import markdown
 
-from pyHiliter import PythonLexer
+from pyHiliter import PythonLexer, PythonConsoleLexer
 
 def test_py(script_filename, output_html_filename='examples/test_output.html',
             template='examples/test_template.html'):
     script_text = open(script_filename, 'r').read()
-    html_str = highlight(script_text, PythonLexer(), HtmlFormatter())
+    html_str = highlight(script_text, PythonConsoleLexer(), HtmlFormatter())
     output_soup = BeautifulSoup(open(template, 'r').read(),
                                 features="html5lib")
     script_soup = BeautifulSoup(html_str, features="html5lib")
@@ -26,7 +26,6 @@ def test_md(md_filename, output_html_filename='examples/test_output.html',
     md_text = open(md_filename, 'r').read()
     html_str = markdown.markdown(md_text, 
         extensions=['markdown.extensions.toc',
-                    'pymdownx.tilde',
                     'pymdownx.superfences'])
     output_soup = BeautifulSoup(open(template, 'r').read(),
                                 features="html5lib")
