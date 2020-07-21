@@ -57,19 +57,20 @@ class PythonLexer(RegexLexer):
     uni_name = "[%s][%s]*" % (uni.xid_start, uni.xid_continue)
 
     BUILTINS = words((
-                    '__import__', 'abs', 'all', 'any', 'bin', 'bool',
-                    'bytearray', 'bytes', 'chr', 'classmethod', 'compile',
-                    'complex', 'delattr', 'dict', 'dir', 'divmod', 'exit',
-                    'enumerate', 'eval', 'filter', 'format', 'frozenset',
-                    'getattr', 'globals', 'hasattr', 'hash', 'hex', 'id',
-                    'input', 'isinstance', 'issubclass', 'iter', 'len',
-                    'locals', 'map', 'max', 'memoryview', 'min', 'next',
-                    'object', 'oct', 'open', 'ord', 'pow', 'print',
-                    'property', 'range', 'repr', 'reversed', 'round', 'set',
-                    'setattr', 'slice', 'sorted', 'staticmethod', 'sum',
-                    'super', 'type', 'vars', 'zip'))
+                    '__import__', 'abs', 'all', 'any', 'bin', 'chr', 
+                    'classmethod', 'compile', 'delattr', 'dir', 'divmod', 
+                    'enumerate', 'eval', 'filter', 'format', 'getattr', 
+                    'globals', 'hasattr', 'hash', 'hex', 'id', 'input', 
+                    'isinstance', 'issubclass', 'iter', 'len', 'locals', 
+                    'map', 'max', 'min', 'next', 'oct', 'open', 'ord', 'pow', 
+                    'print', 'property', 'range', 'repr', 'reversed', 'round',
+                    'setattr', 'sorted', 'staticmethod', 'sum', 'super', 
+                    'type', 'vars', 'zip'))
 
-    KEYWORD_TYPES = words(('int', 'float', 'str', 'list', 'set', 'tuple'))
+    KEYWORD_TYPES = words((
+                    'bool' 'bytearray', 'bytes', 'complex', 'dict', 'float', 
+                    'frozenset', 'int', 'list', 'memoryview', 'object', 'set',
+                    'slice', 'str', 'tuple'))
 
     def innerstring_rules(ttype):
         return [
@@ -380,6 +381,9 @@ class PythonLexer(RegexLexer):
         'classDef': [
             (r'([a-zA-Z_][\w\d_]*)(\s*)(\()', 
              bygroups(Name.Class, Text, Punctuation), 'inheritance'),
+            (r'([a-zA-Z_][\w\d_]*)(\s*)(:)', 
+             bygroups(Name.Class, Text, Punctuation), '#pop'),
+            default('#pop')
         ],
         'inheritance': [
             (r'\):', Punctuation, '#pop'),
