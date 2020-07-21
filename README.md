@@ -39,4 +39,4 @@ The figure below shows how it appears to be improved.
 
 ![Results](examples/python_results.png)  
 
-Note that due to my fanatic love towards Sublime Monokai theme, I'm actually using the same color schemes for multiple typs of syntax scopes, exactly as how Monokai is designed, even though they can be successfully identified as different elements. Refer to [`examles/highlight.css`](examples/monokai.css).   
+Note that due to my fanatic love towards Sublime Monokai theme, I'm actually using the same color schemes for multiple typs of syntax scopes, exactly as how Monokai is designed, even though they can be successfully identified as different elements. Refer to [`examles/monokai.css`](examples/monokai.css).   
