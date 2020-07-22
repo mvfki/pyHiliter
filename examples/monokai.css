@@ -9,8 +9,8 @@ pre {
 	padding: 1em;
 	border-radius: 15px;
 	line-height: 1.3em;
-    font-size: 13px;
-    color: #f8f8f2;
+	font-size: 13px;
+	color: #f8f8f2;
 }
 	pre code {
 		color: #f8f8f2;
@@ -35,7 +35,7 @@ pre {
 .sd, .c1, .c, .cp, .gp, .ch { /* hash comment */
 	color: #747053; /* grey */
 }
-.m, .mi, .mf, .kc, .se, .si, .srb { /* integers, floats, constant keyword, string.escape */
+.m, .mi, .mf, .mh, .kc, .se, .si, .srb { /* integers, floats, constant keyword, string.escape */
 	color: #ac80ff; /* purple */
 }
 .s, .s1, .s2 { /* str */

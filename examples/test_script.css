@@ -1,0 +1,3 @@
+.style1 img.svgIcon {
+	filter: invert(35%) sepia(19%) saturate(278%) hue-rotate(162deg) brightness(95%) contrast(87%);
+}
