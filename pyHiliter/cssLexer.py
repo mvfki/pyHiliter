@@ -289,7 +289,7 @@ class CssLexer(RegexLexer):
             (r'(@)([\w-]+)', bygroups(Operator, Keyword), 'atrule'),
             include('numeric-values'),
             (r'([\w-]+)(\s*)(\[)(\s*)([\w-]+)(\s*)(=)(\s*)([\'"].*?[\'"])(\s*)(\])', 
-             bygroups(Name.Tag, Text, Punctuation, Text, Name.Class, Text, Operator, Text, String, Text, Punctuation)),
+             bygroups(Name.Tag, Text, Punctuation, Text, Name.Attribute, Text, Operator, Text, String, Text, Punctuation)),
             (r'[\w-]+', Name.Tag),
             (r'[\],;:()\[>]', Punctuation),
             (r'[~^*!%&$<|+=@./?-]', Operator),
