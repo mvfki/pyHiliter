@@ -9,14 +9,14 @@ Since I am not really happy with [Pygments](https://pygments.org/)' lexical anal
 
 ## Usage
 
-Get the code
+Get the code first:  
 
 ```sh
 git clone https://github.com/mvfki/pyHiliter.git
 cd pyHiliter
 ```
 
-To make use of the lexer, two approaches are suggested.
+To make use of the lexer, two approaches are suggested.  
 
 #### Directly import the class
 
@@ -26,7 +26,7 @@ In this approach, you might want to get this package installed to your Python pa
 python setup.py install
 ```
 
-And in your Python script run the following commands, which go with the most basic Pygments style.
+And in your Python script run the following commands, which go with the most basic Pygments style.  
 
 ```python
 from pyHiliter import PythonLexer
@@ -41,7 +41,7 @@ os.path.join('foo', 'bar')
 html_string = highlight(script_text, PythonLexer(), HtmlFormatter())
 ```
 
-The output will be a str, written with HTML syntax, and you can further manipulate it with your favorite HTML handler.
+The output will be a str, written with HTML syntax, and you can further manipulate it with your favorite HTML handler.  
 
 ```python
 '<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>\n<span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nfc">join</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>\n</pre></div>\n'
@@ -56,9 +56,9 @@ mv ${pathTo}/site-packages/pygments/lexers/python.py ${pathTo}/site-packages/pyg
 ln -s pyHiliter/pyLexer.py {$pathTo}/site-packages/pygments/lexers/python.py
 ```
 
-Yes, manually override the original Pygment Python lexer. Inspired by [@markperfectsensedigital](https://github.com/markperfectsensedigital/custom_lexers) So anytime when Pygments is invoked and the `PythonLexer` is requested, the one from this package will be found. 
+Yes, manually override the original Pygment Python lexer. Inspired by [@markperfectsensedigital](https://github.com/markperfectsensedigital/custom_lexers) So anytime when Pygments is invoked and the `PythonLexer` is requested, the one from this package will be found.  
 
-**Note that** There are also other Python related lexers, such as the ones for Python console, traceback, and *etc.*. I also copied those lexers and appended them to the script, since excluding them will cause failure in parsing the corresponding language, yet no significant changes were made. 
+**Note that** There are also other Python related lexers, such as the ones for Python console, traceback, and *etc.*. I also copied those lexers and appended them to the script, since excluding them will cause failure in parsing the corresponding language, yet no significant changes were made.  
 
 And when using it:
 
@@ -85,7 +85,7 @@ Python2 related functionality, originally there, is fully discarded intentionall
 
 #### Bash
 
-`BashLexer` for shell scripts is also provided with improvements in some degree. 
+`BashLexer` for shell scripts is also provided with improvements in some degree.  
 
 - Dash-letter style arguments indicator
 - Function definition
@@ -95,9 +95,11 @@ A main difficulty for bash lexer is to mark up the command being executed. Intui
 
 **TODO**
 
-Special syntax (a LOT) that I don't frequently use, I also need to explore more for these. Please [raise an issue](https://github.com/mvfki/pyHiliter/issues/new) if you find something is not supported properly, and sounds like a reasonable request.
+Special syntax (a LOT) that I don't frequently use, I also need to explore more for these. Please [raise an issue](https://github.com/mvfki/pyHiliter/issues/new) if you find something is not supported properly, and sounds like a reasonable request.  
 
-Demonstration code:  
+## Demonstration 
+
+Below is a short demo script in Python. Save it to `examples/test_script_to_convert.py`.  
 
 ```python
 import re
@@ -112,8 +114,8 @@ text = '''Hello World!!!!'''
 foo(text, bar2="not used")
 ```
 
-The figure below shows how it appears to be improved.  
+Copy-pasting it to Sublime Text editor gives you the figure on the left; running `test_py()` from `run_test.py` with `PythonLexer` from this repository outputs an HTML file at `examples/test_output.html`, where you get the screenshot in the middle; and run the function but import `PythonLexer` from `Pygments.lexers` will give you the one on the right. Then you can see how things are improved.  
 
 ![Results](examples/python_results.png)  
 
-Note that due to my fanatic love towards Sublime Monokai theme, I'm actually using the same color schemes for multiple typs of syntax scopes, exactly as how Monokai is designed, even though they can be successfully identified as different elements. Refer to [`examles/monokai.css`](examples/monokai.css).   
+Note that due to my fanatic love towards Sublime Monokai theme, I'm actually using the same color schemes for multiple typs of syntax scopes, exactly as how Monokai is designed, even though they can be successfully identified as different elements. Refer to [`examples/monokai.css`](examples/monokai.css).   
