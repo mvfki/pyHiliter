@@ -71,6 +71,8 @@ html_string = markdown.markdown(md_text, extensions=['pymdownx.superfences'])
 
 ## Improved Features
 
+#### Python
+
 - Function, object method, builtins being called
 - Argument names in function definition
 - keyword argument name in callable calling
@@ -79,9 +81,21 @@ html_string = markdown.markdown(md_text, extensions=['pymdownx.superfences'])
 - Lambda function
 - Decorator
 
+Python2 related functionality, originally there, is fully discarded intentionally.  
+
+#### Bash
+
+`BashLexer` for shell scripts is also provided with improvements in some degree. 
+
+- Dash-letter style arguments indicator
+- Function definition
+- `VAR=STR` style string variable assignment
+
+A main difficulty for bash lexer is to mark up the command being executed. Intuitively, they are the first word in a basic, plain expression. But due to how the lexer is originally implemented, the division of lines are totally removed. So it is only possible to parse it correctly if I totally rewrite it. But still for the goal of highlighting a command being called, I hardcoded as many of them as I could remember. (Remind me more through [issue](https://github.com/mvfki/pyHiliter/issues/new) please!) Currently I'm simply mixing up all of them to `Name.Builtin` token category.  
+
 **TODO**
 
-Special syntax (a LOT) that I don't frequently use, I also need to explore more for this. Please [raise an issue](https://github.com/mvfki/pyHiliter/issues/new) if you find something is not supported properly.
+Special syntax (a LOT) that I don't frequently use, I also need to explore more for these. Please [raise an issue](https://github.com/mvfki/pyHiliter/issues/new) if you find something is not supported properly, and sounds like a reasonable request.
 
 Demonstration code:  
 

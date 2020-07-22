@@ -32,10 +32,10 @@ pre {
 .nd, .nb, .nfc, .fm { /* decorator; builtins; function called */
  	color: #67d8da; /* blue */
  }
-.sd, .c1, .err, .c, .cp, .gp { /* hash comment */
+.sd, .c1, .c, .cp, .gp, .ch { /* hash comment */
 	color: #747053; /* grey */
 }
-.mi, .mf, .kc, .se, .si, .srb { /* integers, floats, constant keyword, string.escape */
+.m, .mi, .mf, .kc, .se, .si, .srb { /* integers, floats, constant keyword, string.escape */
 	color: #ac80ff; /* purple */
 }
 .s, .s1, .s2 { /* str */
@@ -53,4 +53,8 @@ pre {
 	}
 .nci {
 	font-style: italic;
+}
+.err {
+	background: #f92b50;
+	color: #f8f8f2;
 }
