@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 """
+pyHiliter modified version
+by Yichen Wang
+
     pygments.lexers.css
     ~~~~~~~~~~~~~~~~~~~
 
@@ -267,6 +270,7 @@ _all_units = _angle_units + _frequency_units + _length_units + \
 
 class CssLexer(RegexLexer):
     """
+    pyHiliter modified version
     For CSS (Cascading Style Sheets).
     """
 
@@ -559,6 +563,7 @@ def _starts_block(token, state):
 
 class SassLexer(ExtendedRegexLexer):
     """
+    pyHiliter modified version
     For Sass stylesheets.
 
     .. versionadded:: 1.3
@@ -641,6 +646,7 @@ class SassLexer(ExtendedRegexLexer):
 
 class ScssLexer(RegexLexer):
     """
+    pyHiliter modified version
     For SCSS stylesheets.
     """
 
@@ -691,6 +697,7 @@ class ScssLexer(RegexLexer):
 
 class LessCssLexer(CssLexer):
     """
+    pyHiliter modified version
     For `LESS <http://lesscss.org/>`_ styleshets.
 
     .. versionadded:: 2.1

@@ -1,3 +1,16 @@
+# -*- coding: utf-8 -*-
+"""
+pyHiliter modified version
+by Yichen Wang
+
+    pygments.lexers.python
+    ~~~~~~~~~~~~~~~~~~~~~~
+
+    Lexers for Python and related languages.
+
+    :copyright: Copyright 2006-2019 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
+"""
 import re
 from pygments.lexer import Lexer, RegexLexer, include, bygroups, default, \
 words, combined, using, do_insertions
@@ -20,13 +33,13 @@ STANDARD_TYPES[Name.Class.Inherit] = 'nci'
 
 class PythonLexer(RegexLexer):
     """
+    pyHiliter modified version
     For `Python <http://www.python.org>`_ source code (version 3.x).
     .. versionadded:: 0.10
     .. versionchanged:: 2.5
        This is now the default ``PythonLexer``.  It is still available as the
        alias ``Python3Lexer``.
 
-    .. Modified by Yichen Wang, Jul, 2020.
     """
 
     name = 'Python'
@@ -601,6 +614,7 @@ Python3Lexer = PythonLexer
 
 class PythonConsoleLexer(Lexer):
     """
+    pyHiliter modified version
     For Python console output or doctests, such as:
 
     .. sourcecode:: pycon
@@ -688,6 +702,7 @@ class PythonConsoleLexer(Lexer):
 
 class PythonTracebackLexer(RegexLexer):
     """
+    pyHiliter modified version
     For Python 3.x tracebacks, with support for chained exceptions.
 
     .. versionadded:: 1.0
@@ -736,6 +751,7 @@ Python3TracebackLexer = PythonTracebackLexer
 
 class CythonLexer(RegexLexer):
     """
+    pyHiliter modified version
     For Pyrex and `Cython <http://cython.org>`_ source code.
 
     .. versionadded:: 1.1
@@ -917,6 +933,7 @@ class CythonLexer(RegexLexer):
 
 class DgLexer(RegexLexer):
     """
+    pyHiliter modified version
     Lexer for `dg <http://pyos.github.com/dg>`_,
     a functional and object-oriented programming language
     running on the CPython 3 VM.

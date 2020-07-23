@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 """
+pyHiliter modified version
+by Yichen Wang
+
     pygments.lexers.shell
     ~~~~~~~~~~~~~~~~~~~~~
 
@@ -27,6 +30,7 @@ STANDARD_TYPES[Keyword.Argument] = 'ka'
 
 class BashLexer(RegexLexer):
     """
+    pyHiliter modified version
     Lexer for (ba|k|z|)sh shell scripts.
 
     .. versionadded:: 0.6
@@ -148,6 +152,7 @@ class BashLexer(RegexLexer):
 
 class SlurmBashLexer(BashLexer):
     """
+    pyHiliter modified version
     Lexer for (ba|k|z|)sh Slurm scripts.
 
     .. versionadded:: 2.4
@@ -170,6 +175,7 @@ class SlurmBashLexer(BashLexer):
 
 class ShellSessionBaseLexer(Lexer):
     """
+    pyHiliter modified version
     Base lexer for simplistic shell sessions.
 
     .. versionadded:: 2.1
@@ -236,6 +242,7 @@ class ShellSessionBaseLexer(Lexer):
 
 class BashSessionLexer(ShellSessionBaseLexer):
     """
+    pyHiliter modified version
     Lexer for simplistic shell sessions.
 
     .. versionadded:: 1.1
@@ -255,6 +262,7 @@ class BashSessionLexer(ShellSessionBaseLexer):
 
 class BatchLexer(RegexLexer):
     """
+    pyHiliter modified version
     Lexer for the DOS/Windows Batch file format.
 
     .. versionadded:: 0.7
@@ -565,6 +573,7 @@ class BatchLexer(RegexLexer):
 
 class MSDOSSessionLexer(ShellSessionBaseLexer):
     """
+    pyHiliter modified version
     Lexer for simplistic MSDOS sessions.
 
     .. versionadded:: 2.1
@@ -582,6 +591,7 @@ class MSDOSSessionLexer(ShellSessionBaseLexer):
 
 class TcshLexer(RegexLexer):
     """
+    pyHiliter modified version
     Lexer for tcsh scripts.
 
     .. versionadded:: 0.10
@@ -650,6 +660,7 @@ class TcshLexer(RegexLexer):
 
 class TcshSessionLexer(ShellSessionBaseLexer):
     """
+    pyHiliter modified version
     Lexer for Tcsh sessions.
 
     .. versionadded:: 2.1
@@ -667,6 +678,7 @@ class TcshSessionLexer(ShellSessionBaseLexer):
 
 class PowerShellLexer(RegexLexer):
     """
+    pyHiliter modified version
     For Windows PowerShell code.
 
     .. versionadded:: 1.5
@@ -781,6 +793,7 @@ class PowerShellLexer(RegexLexer):
 
 class PowerShellSessionLexer(ShellSessionBaseLexer):
     """
+    pyHiliter modified version
     Lexer for simplistic Windows PowerShell sessions.
 
     .. versionadded:: 2.1
@@ -798,6 +811,7 @@ class PowerShellSessionLexer(ShellSessionBaseLexer):
 
 class FishShellLexer(RegexLexer):
     """
+    pyHiliter modified version
     Lexer for Fish shell scripts.
 
     .. versionadded:: 2.1
