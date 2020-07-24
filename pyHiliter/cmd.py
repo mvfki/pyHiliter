@@ -31,12 +31,13 @@ def can_override(lang: str, force: bool) -> bool:
     original_script_path = os.path.join(SITE_PACKAGES_PATH, 'pygments',
                                         'lexers', lang+'.py')
     if orig_lexer.__doc__.startswith('\n    pyHiliter'):
+        sys.stderr.write(f'pyHiliter {lang} lexer is already there. ')
         if not force:
-            sys.stderr.write(f'pyHiliter {lang} lexer is already there. '
-                              'Use "-f" to force overriding. \n')
+            sys.stderr.write('Use "-f" to force overriding. \n')
             return False
         else:
             if os.path.exists(original_script_path+'.old'):
+                sys.stderr.write(f'Force overriding {lang}.')
                 return True
             else:
                 sys.stderr.write(f'Backup file for {lang} lexer not found. '
@@ -53,9 +54,9 @@ def override_one_lang(lang: str):
     if not os.path.exists(original_script_path+'.old'):
         # Back up already there, directly overwrite '.py', in case that in a
         # forced state old code are gone
-        os.rename(original_script_path, original_script_path+'.old')
+        shutil.move(original_script_path, original_script_path+'.old')
     shutil.copy(new_lexer_path, original_script_path)
-    sys.stdout.write('Done!\n')
+    sys.stdout.write(f'{lang} Done!\n')
 
 def override(lang: str=None, force: bool=False) -> None:
     '''
@@ -64,20 +65,55 @@ def override(lang: str=None, force: bool=False) -> None:
     lang = None, for all languages supported
     lang = ["python"|"css"|"shell"], for only one of them
     '''
-    if not SITE_PACKAGES_PATH.endswith('site-packages'):
-        raise ModuleNotFoundError("pyHiliter and Pygments are not under the "
-            "same 'site-packages' common path. You will have to manully pass "
-            "where Pygments is installed.")
     lang = map_lang(lang)
     if lang is None:
         check_result = [can_override(i, force) for i in LANG]
         if sum(check_result) < len(LANG):
+            sys.stderr.write('Not all languages can be overridden at the '
+                             'time. Choose the ones that work. ')
             sys.exit(6)
         else:
             for i in LANG:
                 override_one_lang(i)
     elif can_override(lang, force):
         override_one_lang(lang)
+
+def can_reset(lang: str) -> bool:
+    original_script_path = os.path.join(SITE_PACKAGES_PATH, 'pygments',
+                                        'lexers', lang+'.py')
+    orig_lexer = get_lexer_by_name(lang)
+    using_pyHiliter_now = orig_lexer.__doc__.startswith('\n    pyHiliter')
+    if not os.path.exists(original_script_path+'.old'):
+        sys.stderr.write(f'Unable to find backup for {lang}. \n')
+        if using_pyHiliter_now:
+            sys.stderr.write(f'While current active lexer for {lang} is from '
+                              'pyHiliter. You should reinstall Pygments in '
+                              'order to reset.')
+        else:
+            sys.stderr.write(f'While current active lexer for {lang} is not '
+                              'from pyHiliter. Skipping.')
+        return False
+    else:
+        if using_pyHiliter_now:
+            return True
+        else:
+            sys.stderr.write(f'Backup for {lang} found, but current active '
+                              'lexer is not from pyHiliter. Skipping.')
+            return False
+
+def reset_one_lang(lang: str) -> None:
+    original_script_path = os.path.join(SITE_PACKAGES_PATH, 'pygments',
+                                        'lexers', lang+'.py')
+    shutil.move(original_script_path+'.old', original_script_path)
+
+def reset(lang: str=None) -> None:
+    lang = map_lang(lang)
+    if lang is None:
+        for i in LANG:
+            if can_reset(i):
+                reset_one_lang(i)
+    elif can_reset(lang):
+        reset_one_lang(lang)
 
 def parse_arguments(argv: list):
     parser = argparse.ArgumentParser(
@@ -98,8 +134,12 @@ def parse_arguments(argv: list):
     # For reset
     parser_reset = subparsers.add_parser('reset',
         help='Reset Pygments library to its original. Not working yet')
-    parser_reset.add_argument('-l', '--lang', metavar='str', type=str,
+    rs_lang_group = parser_reset.add_mutually_exclusive_group()
+    rs_lang_group.add_argument('-l', '--lang', metavar='str', type=str,
         help='Reset specified language.')
+    rs_lang_group.add_argument('-a', '--all', action='store_true',
+        help='Reset all languages.')
+    # For help printing
     if len(argv) == 0:
         parser.print_help()
         sys.exit(233)
@@ -114,8 +154,17 @@ def parse_arguments(argv: list):
 
 def main():
     args, mode = parse_arguments(sys.argv[1:])
+    if not SITE_PACKAGES_PATH.endswith('site-packages'):
+        raise ModuleNotFoundError("pyHiliter and Pygments are not under the "
+            "same 'site-packages' common path. You will have to manully pass "
+            "where Pygments is installed.")
     if mode == 'override':
         if args.all:
             override(force=args.force)
         else:
             override(args.lang, args.force)
+    elif mode == 'reset':
+        if args.all:
+            reset()
+        else:
+            reset(args.lang)
