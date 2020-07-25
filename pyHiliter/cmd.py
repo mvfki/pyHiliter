@@ -72,7 +72,7 @@ def override_one_lang(lang: str):
         # forced state old code are gone
         shutil.move(original_script_path, original_script_path+'.old')
     shutil.copy(new_lexer_path, original_script_path)
-    logging.info(f'Overriding '{lang}' Done!')
+    logging.info(f"Overriding '{lang}' Done!")
 
 def override(lang: str=None, force: bool=False) -> None:
     '''
