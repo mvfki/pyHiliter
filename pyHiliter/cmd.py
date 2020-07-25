@@ -1,6 +1,7 @@
 import argparse
 import shutil
 import os, sys
+import logging
 import pygments
 from pygments.lexers import get_lexer_by_name, guess_lexer
 from pygments import highlight
@@ -20,6 +21,9 @@ METAVAR = f"[{' | '.join(LANG)}]"
 FILE_MAP = {'python': 'pyLexer.py', 'css': 'cssLexer.py', 
             'shell': 'shLexer.py'}
 LEXER_MAP = {'python': pyLexer, 'css': cssLexer, 'shell': shLexer}
+
+logging.basicConfig(level=logging.INFO, 
+                    format="%(asctime)s - %(levelname)s - %(message)s")
 
 def map_lang(alias: str, local=False) -> str:
     if alias is None:
@@ -43,17 +47,17 @@ def can_override(lang: str, force: bool) -> bool:
     original_script_path = os.path.join(SITE_PACKAGES_PATH, 'pygments',
                                         'lexers', lang+'.py')
     if orig_lexer.__doc__.startswith('\n    pyHiliter'):
-        sys.stderr.write(f'pyHiliter {lang} lexer is already there. ')
+        logging.warning(f'pyHiliter {lang} lexer is already there. ')
         if not force:
-            sys.stderr.write('Use "-f" to force overriding. \n')
+            logging.warning('Use "-f" to force overriding. ')
             return False
         else:
             if os.path.exists(original_script_path+'.old'):
-                sys.stderr.write(f'Force overriding {lang}.')
+                logging.info(f'Force overriding {lang}.')
                 return True
             else:
-                sys.stderr.write(f'Backup file for {lang} lexer not found. '
-                                  'You need to reinstall Pygments. \n')
+                logging.critical(f'Backup file for {lang} lexer not found. '
+                                  'You need to reinstall Pygments. ')
                 return False
     else:
         return True
@@ -68,7 +72,7 @@ def override_one_lang(lang: str):
         # forced state old code are gone
         shutil.move(original_script_path, original_script_path+'.old')
     shutil.copy(new_lexer_path, original_script_path)
-    sys.stdout.write(f'{lang} Done!\n')
+    logging.info(f'Overriding '{lang}' Done!')
 
 def override(lang: str=None, force: bool=False) -> None:
     '''
@@ -81,8 +85,8 @@ def override(lang: str=None, force: bool=False) -> None:
     if lang is None:
         check_result = [can_override(i, force) for i in LANG]
         if sum(check_result) < len(LANG):
-            sys.stderr.write('Not all languages can be overridden at the '
-                             'time. Choose the ones that work. ')
+            logging.error('Not all languages can be overridden at the time. '
+                          'Choose the ones that work. ')
             sys.exit(6)
         else:
             for i in LANG:
@@ -96,20 +100,20 @@ def can_reset(lang: str) -> bool:
     orig_lexer = get_lexer_by_name(lang)
     using_pyHiliter_now = orig_lexer.__doc__.startswith('\n    pyHiliter')
     if not os.path.exists(original_script_path+'.old'):
-        sys.stderr.write(f'Unable to find backup for {lang}. \n')
+        logging.error(f'Unable to find backup for {lang}. ')
         if using_pyHiliter_now:
-            sys.stderr.write(f'While current active lexer for {lang} is from '
+            logging.critical(f'While current active lexer for {lang} is from '
                               'pyHiliter. You should reinstall Pygments in '
                               'order to reset.')
         else:
-            sys.stderr.write(f'While current active lexer for {lang} is not '
-                              'from pyHiliter. Skipping.')
+            logging.info(f'While current active lexer for {lang} is not '
+                          'from pyHiliter. Skipping.')
         return False
     else:
         if using_pyHiliter_now:
             return True
         else:
-            sys.stderr.write(f'Backup for {lang} found, but current active '
+            logging.warning(f'Backup for {lang} found, but current active '
                               'lexer is not from pyHiliter. Skipping.')
             return False
 
@@ -134,11 +138,33 @@ def convert(filename, lang=None, output=None):
     # Get lexer instance
     lang = map_lang(lang, False)
     if lang is None:
-        sys.stderr.write("Languages not specified. Guessing using Pygments.")
-        lexer = guess_lexer(script_text)
+        logging.info("Languages not specified. ")
+        # First look at the ext. name, if supported, still use mine.
+        if '.' in filename:
+            ext_name = filename.split('.')[-1]
+            ext_lang = map_lang(ext_name, False)
+            if ext_lang in LANG:
+                logging.info(f"Using {ext_lang} lexer for extension name "
+                             f"'{ext_name}'. ")
+                lexer = LEXER_MAP[ext_lang]()
+            else:
+                try:
+                    logging.info(f"Trying to use Pygments lexer for "
+                                 f"extension name '{ext_name}'. ")
+                    lexer = get_lexer_by_name(ext_lang)
+                except Exception as e:
+                    logging.warning(f"{e} occured when getting a lexer from "
+                                     "Pygments with extension name "
+                                     "'{ext_name}'. Directly guessing the "
+                                     "language from text. ")
+                    lexer = guess_lexer(script_text)
+        else:
+            logging.info(f"No extension name seen. Directly guessing the "
+                          "language from text. ")
+            lexer = guess_lexer(script_text)
     elif lang not in LANG:
-        sys.stderr.write(f"Specified language '{lang}' is not supported by "
-                         "pyHiliter. Going to use Pygments.")
+        logging.warning(f"Specified language '{lang}' is not supported by "
+                         "pyHiliter. Going to use Pygments. ")
         lexer = get_lexer_by_name(lang)
     else:
         # Has to be an instance not class
