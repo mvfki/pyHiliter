@@ -17,9 +17,24 @@ cd pyHiliter
 python setup.py install
 ```
 
-To make use of the lexers, two approaches are suggested.  
+To make use of the lexers, three approaches are suggested.  
 
-#### Directly import the class
+### Convert script file in command line
+
+A simple command line tool is also implemented for direct conversion. 
+
+```sh
+pyHiliter convert -l python -o output.html input_script.py
+```
+
+```
+-l/--lang    For alias of the language used, 
+             can be omitted and let Pygments guess.
+-o/--output  For the output file name, 
+             can be omitted and direct output to <stdout>.
+```
+
+### Directly import the class
 
 In your Python script run the following commands, which go with the most basic Pygments style.  
 
@@ -46,7 +61,7 @@ The output will be a str, written with HTML syntax, and you can further manipula
 '<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>\n<span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nfc">join</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>\n</pre></div>\n'
 ```
 
-#### Bundle the feature with Markdown module
+### Bundle the feature with Markdown module
 
 Python's native Markdown module allows third-party extension to parse syntax that is not officially supported, or to do the parsing with more detail. Pygments has also been imported by extension developers. If you are using a well-developed third-party extension that imports Pygments, such as [`PyMdown Extensions`](https://facelessuser.github.io/pymdown-extensions/), but you want the Python syntax highlighting to look better (just like me). Then you might want to replace the native lexers in original Pygments installation with the lexers here. Command line tool is provided for this purpose.  
 
@@ -71,21 +86,6 @@ import markdown
 
 md_text = "# Header\n```python\nprint('Hello', 'World', sep='!!! ', end='!!!!!!')\n```"
 html_string = markdown.markdown(md_text, extensions=['pymdownx.superfences'])
-```
-
-#### Convert script file in command line
-
-A simple command line tool is also implemented for direct conversion. 
-
-```sh
-pyHiliter convert -l python -o output.html input_script.py
-```
-
-```
--l/--lang    For alias of the language used, 
-             can be omitted and let Pygments guess.
--o/--output  For the output file name, 
-             can be omitted and direct output to <stdout>.
 ```
 
 ## Improved Features
