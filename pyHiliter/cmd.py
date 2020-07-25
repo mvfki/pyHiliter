@@ -2,8 +2,12 @@ import argparse
 import shutil
 import os, sys
 import pygments
-from pygments.lexers import get_lexer_by_name
-import importlib
+from pygments.lexers import get_lexer_by_name, guess_lexer
+from pygments import highlight
+from pygments.formatters import HtmlFormatter
+from pyHiliter import PythonLexer as pyLexer
+from pyHiliter import CssLexer as cssLexer
+from pyHiliter import BashLexer as shLexer
 
 __all__ = ['override_pygments']
 
@@ -11,10 +15,13 @@ PYGMENTS_PATH = pygments.__file__
 SITE_PACKAGES_PATH = os.path.commonpath([__file__, PYGMENTS_PATH])
 LEXERS_PATH = os.path.join(SITE_PACKAGES_PATH, 'pygments', 'lexers')
 
-LANG = {'python', 'css', 'shell'}
+LANG = ['python', 'shell', 'css']
+METAVAR = f"[{' | '.join(LANG)}]"
 FILE_MAP = {'python': 'pyLexer.py', 'css': 'cssLexer.py', 
             'shell': 'shLexer.py'}
-def map_lang(alias: str) -> str:
+LEXER_MAP = {'python': pyLexer, 'css': cssLexer, 'shell': shLexer}
+
+def map_lang(alias: str, local=False) -> str:
     if alias is None:
         return None
     elif alias.lower() in {'py', 'python', 'python3'}:
@@ -24,7 +31,12 @@ def map_lang(alias: str) -> str:
     elif alias.lower() in {'sh', 'shell', 'bash'}:
         return 'shell'
     else:
-        raise ValueError(f'Unable to identify: {alias}')
+        if local:
+            # Only mapping to lang I have
+            raise ValueError(f'map_lang(): unable to identify: {alias}')
+        else:
+            # If not supported, can also use Pygments
+            return alias
 
 def can_override(lang: str, force: bool) -> bool:
     orig_lexer = get_lexer_by_name(lang)
@@ -65,7 +77,7 @@ def override(lang: str=None, force: bool=False) -> None:
     lang = None, for all languages supported
     lang = ["python"|"css"|"shell"], for only one of them
     '''
-    lang = map_lang(lang)
+    lang = map_lang(lang, True)
     if lang is None:
         check_result = [can_override(i, force) for i in LANG]
         if sum(check_result) < len(LANG):
@@ -107,13 +119,38 @@ def reset_one_lang(lang: str) -> None:
     shutil.move(original_script_path+'.old', original_script_path)
 
 def reset(lang: str=None) -> None:
-    lang = map_lang(lang)
+    lang = map_lang(lang, True)
     if lang is None:
         for i in LANG:
             if can_reset(i):
                 reset_one_lang(i)
     elif can_reset(lang):
         reset_one_lang(lang)
+
+def convert(filename, lang=None, output=None):
+    with open(filename, 'r', encoding='utf-8') as f:
+        script_text = f.read()
+    f.close()
+    # Get lexer instance
+    lang = map_lang(lang, False)
+    if lang is None:
+        sys.stderr.write("Languages not specified. Guessing using Pygments.")
+        lexer = guess_lexer(script_text)
+    elif lang not in LANG:
+        sys.stderr.write(f"Specified language '{lang}' is not supported by "
+                         "pyHiliter. Going to use Pygments.")
+        lexer = get_lexer_by_name(lang)
+    else:
+        # Has to be an instance not class
+        lexer = LEXER_MAP[lang]()
+    # Convert
+    html_str = highlight(script_text, lexer, HtmlFormatter())
+    if output is None:
+        sys.stdout.write(html_str+'\n')
+    else:
+        with open(output, 'w', encoding='utf-8') as f:
+            f.write(html_str)
+        f.close()
 
 def parse_arguments(argv: list):
     parser = argparse.ArgumentParser(
@@ -127,7 +164,7 @@ def parse_arguments(argv: list):
     ov_lang_group = parser_override.add_mutually_exclusive_group()
     ov_lang_group.add_argument('-a', '--all', action='store_true', 
         help='Override all I have.')
-    ov_lang_group.add_argument('-l', '--lang', metavar='str', type=str,
+    ov_lang_group.add_argument('-l', '--lang', metavar=METAVAR, type=str,
         help='Override specified language.')
     parser_override.add_argument('-f', '--force', action='store_true',
         help='Force overriding selected lexers.')
@@ -135,11 +172,25 @@ def parse_arguments(argv: list):
     parser_reset = subparsers.add_parser('reset',
         help='Reset Pygments library to its original. Not working yet')
     rs_lang_group = parser_reset.add_mutually_exclusive_group()
-    rs_lang_group.add_argument('-l', '--lang', metavar='str', type=str,
+    rs_lang_group.add_argument('-l', '--lang', metavar=METAVAR, type=str,
         help='Reset specified language.')
     rs_lang_group.add_argument('-a', '--all', action='store_true',
         help='Reset all languages.')
-    # For help printing
+    # For Convert
+    parser_convert = subparsers.add_parser('convert',
+        help='Convert script file to code highlighited HTML file. ')
+    parser_convert.add_argument('File', help='The script file.')
+    parser_convert.add_argument('-l', '--lang', metavar=METAVAR, type=str,
+        default=None, help='Language of the script being converted. If '
+                           'unset, will let Pygments to guess language; '
+                           'Languages other than these can also be converted '
+                           'by using Pygments default lexers; If not '
+                           'specified, Pygments will guess the language, but '
+                           'the accuracy depends. ')
+    parser_convert.add_argument('-o', '--output', metavar='FILE', type=str,
+        default=None, help='The file to write the output result. By '
+                               'default printed to <STDOUT>')
+    
     if len(argv) == 0:
         parser.print_help()
         sys.exit(233)
@@ -148,6 +199,9 @@ def parse_arguments(argv: list):
         sys.exit(233)
     elif len(argv) == 1 and argv[0] == 'reset':
         parser_reset.print_help()
+        sys.exit(233)
+    elif len(argv) == 1 and argv[0] == 'convert':
+        parser_convert.print_help()
         sys.exit(233)
     args = parser.parse_args(argv)
     return args, argv[0]
@@ -168,3 +222,5 @@ def main():
             reset()
         else:
             reset(args.lang)
+    elif mode == 'convert':
+        convert(args.File, args.lang, args.output)
