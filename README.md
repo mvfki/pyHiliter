@@ -14,19 +14,18 @@ Get the code first:
 ```sh
 git clone https://github.com/mvfki/pyHiliter.git
 cd pyHiliter
-```
-
-To make use of the lexer, two approaches are suggested.  
-
-#### Directly import the class
-
-In this approach, you might want to get this package installed to your Python path, so that you can import it wherever you like.  
-
-```sh
 python setup.py install
 ```
 
-And in your Python script run the following commands, which go with the most basic Pygments style.  
+To make use of the lexers, two approaches are suggested.  
+
+#### Directly import the class
+
+In your Python script run the following commands, which go with the most basic Pygments style.  
+
+```sh
+pip install Pygments
+```
 
 ```python
 from pyHiliter import PythonLexer
@@ -49,24 +48,44 @@ The output will be a str, written with HTML syntax, and you can further manipula
 
 #### Bundle the feature with Markdown module
 
-Python's native Markdown module allows third-party extension to parse syntax that is not officially supported, or to do the parsing with more detail. Pygments has also been imported by extension developers. If you are using a well-developed third-party extension that imports Pygments, such as [`PyMdown Extensions`](https://facelessuser.github.io/pymdown-extensions/), but you want the Python syntax highlighting to look better (just like me). Look at this smart yet dirty solution:  
+Python's native Markdown module allows third-party extension to parse syntax that is not officially supported, or to do the parsing with more detail. Pygments has also been imported by extension developers. If you are using a well-developed third-party extension that imports Pygments, such as [`PyMdown Extensions`](https://facelessuser.github.io/pymdown-extensions/), but you want the Python syntax highlighting to look better (just like me). Then you might want to replace the native lexers in original Pygments installation with the lexers here. Command line tool is provided for this purpose.  
 
 ```sh
-mv ${pathTo}/site-packages/pygments/lexers/python.py ${pathTo}/site-packages/pygments/lexers/python.py.old
-ln -s pyHiliter/pyLexer.py {$pathTo}/site-packages/pygments/lexers/python.py
+# "-l <lang>" for replacing one language
+# Mutual exclusively, "-a" for replacing all languages I support.
+pyHiliter override -a
 ```
 
-Yes, manually override the original Pygment Python lexer. Inspired by [@markperfectsensedigital](https://github.com/markperfectsensedigital/custom_lexers) So anytime when Pygments is invoked and the `PythonLexer` is requested, the one from this package will be found.  
+Inspired by [@markperfectsensedigital](https://github.com/markperfectsensedigital/custom_lexers) So anytime when Pygments is invoked and the `PythonLexer` is requested, the one from this package will be found.  
 
 **Note that** There are also other Python related lexers, such as the ones for Python console, traceback, and *etc.*. I also copied those lexers and appended them to the script, since excluding them will cause failure in parsing the corresponding language, yet no significant changes were made.  
 
 And when using it:
+
+```sh
+pip install Pygments pymdown-extensions markdown
+```
 
 ```python
 import markdown
 
 md_text = "# Header\n```python\nprint('Hello', 'World', sep='!!! ', end='!!!!!!')\n```"
 html_string = markdown.markdown(md_text, extensions=['pymdownx.superfences'])
+```
+
+#### Convert script file in command line
+
+A simple command line tool is also implemented for direct conversion. 
+
+```sh
+pyHiliter convert -l python -o output.html input_script.py
+```
+
+```
+-l/--lang    For alias of the language used, 
+             can be omitted and let Pygments guess.
+-o/--output  For the output file name, 
+             can be omitted and direct output to <stdout>.
 ```
 
 ## Improved Features
