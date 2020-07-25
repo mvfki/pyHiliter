@@ -17,6 +17,12 @@ cd pyHiliter
 python setup.py install
 ```
 
+Because that all the functionalities here depend on Pygments, you definitely need to have it installed.
+
+```sh
+pip install Pygments
+```
+
 To make use of the lexers, three approaches are suggested.  
 
 ### Convert script file in command line
@@ -37,10 +43,6 @@ pyHiliter convert -l python -o output.html input_script.py
 ### Directly import the class
 
 In your Python script run the following commands, which go with the most basic Pygments style.  
-
-```sh
-pip install Pygments
-```
 
 ```python
 from pyHiliter import PythonLexer
@@ -78,7 +80,7 @@ Inspired by [@markperfectsensedigital](https://github.com/markperfectsensedigita
 And when using it:
 
 ```sh
-pip install Pygments pymdown-extensions markdown
+pip install markdown pymdown-extensions
 ```
 
 ```python
